@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Next Chapter — Yankie's Birthday</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #fdfbf7 0%, #f7efe7 50%, #f4e8dc 100%);
+      --nav-bg: rgba(253, 251, 247, 0.85);
+      --card-bg: rgba(255, 255, 255, 0.75);
+      --card-border: rgba(255, 255, 255, 0.85);
+      --primary: #c46d4e;
+      --primary-hover: #b05c3e;
+      --primary-light: #f7ede8;
+      --text-main: #231f20;
+      --text-muted: #6e6460;
+      --accent-gold: #d4a373;
+      --shadow-soft: 0 20px 40px -12px rgba(138, 93, 73, 0.12), 0 4px 16px -2px rgba(0, 0, 0, 0.04);
+      --shadow-hover: 0 28px 56px -12px rgba(138, 93, 73, 0.18), 0 8px 24px -2px rgba(0, 0, 0, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg-gradient);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--text-main);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.55;
+      pointer-events: none;
+      z-index: 0;
+      animation: floatSlow 14s ease-in-out infinite alternate;
+    }
+
+    .orb-1 {
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, #fde2d2 0%, rgba(253, 226, 210, 0) 70%);
+      top: -100px;
+      right: -100px;
+    }
+
+    .orb-2 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, #edd3be 0%, rgba(237, 211, 190, 0) 70%);
+      bottom: -150px;
+      left: -100px;
+      animation-delay: -7s;
+    }
+
+    @keyframes floatSlow {
+      0% { transform: translateY(0px) scale(1); }
+      100% { transform: translateY(-40px) scale(1.08); }
+    }
+
+    /* Navigation Bar */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--nav-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 10px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-main);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-brand span {
+      color: var(--primary);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-link {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s ease;
+      position: relative;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--text-main);
+    }
+
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 100%;
+      height: 2px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 600;
+      border-radius: 999px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      outline: none;
+      border: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #c46d4e 0%, #b3593b 100%);
+      color: #ffffff;
+      box-shadow: 0 8px 20px -4px rgba(196, 109, 78, 0.35);
+      padding: 14px 30px;
+      font-size: 0.95rem;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #b05c3e 0%, #9f492d 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px -4px rgba(196, 109, 78, 0.45);
+    }
+
+    /* Content Area */
+    .page-section {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 32px 100px 32px;
+      min-height: calc(100vh - 80px);
+      display: flex;
+      align-items: center;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 60px;
+      align-items: center;
+      width: 100%;
+    }
+
+    .left-side {
+      text-align: left;
+      animation: fadeInLeft 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary-light);
+      color: var(--primary);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      box-shadow: inset 0 0 0 1px rgba(196, 109, 78, 0.15);
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 4.5vw, 3.5rem);
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--text-main);
+      margin-bottom: 24px;
+    }
+
+    h1 span {
+      background: linear-gradient(135deg, #c46d4e 0%, #d4a373 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .message {
+      font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+      line-height: 1.8;
+      color: var(--text-muted);
+      font-weight: 300;
+      max-width: 520px;
+      margin-bottom: 36px;
+    }
+
+    /* Right Side Card */
+    .right-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--card-border);
+      border-radius: 28px;
+      padding: 44px 36px;
+      box-shadow: var(--shadow-soft);
+      animation: fadeInRight 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      position: relative;
+    }
+
+    .right-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #c46d4e, #e29578, #e5b299);
+    }
+
+    .right-card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      margin-bottom: 16px;
+      color: var(--text-main);
+    }
+
+    .wishes-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .wishes-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .wishes-list li span {
+      color: var(--primary);
+    }
+
+    @keyframes fadeInLeft {
+      from { opacity: 0; transform: translateX(-30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes fadeInRight {
+      from { opacity: 0; transform: translateX(30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @media (max-width: 960px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .page-section {
+        padding: 40px 24px 60px 24px;
+      }
+      .nav-links {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand">Yankie<span>.</span></a>
+      <nav class="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="index.html#wish" class="nav-link">The Wish</a>
+        <a href="index.html#timeline" class="nav-link">Memories</a>
+        <a href="next.html" class="nav-link active">Next Chapter</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page-section">
+    <div class="content-grid">
+      <div class="left-side">
+        <div class="badge">
+          <span>✨ The Celebration Continues</span>
+        </div>
+
+        <h1>Wishing You an <span>Incredible Year</span> Ahead</h1>
+
+        <p class="message">
+          May every step forward bring you closer to your dreams, surrounded by the people who cherish you. Here's to making unforgettable memories and celebrating you today and always!
+        </p>
+
+        <div>
+          <a href="index.html" class="btn btn-primary">
+            &larr; Return to Birthday Home
+          </a>
+        </div>
+      </div>
+
+      <div class="right-card">
+        <h3 class="right-card-title">Three Wishes for Your Year</h3>
+        <ul class="wishes-list">
+          <li><span>✦</span> Endless inspiration and success in every goal you set.</li>
+          <li><span>✦</span> Peace of mind, genuine laughter, and vibrant health.</li>
+          <li><span>✦</span> Beautiful adventures and moments worth remembering forever.</li>
+        </ul>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
