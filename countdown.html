@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="0; url=index.html">
   <title>A Special Countdown — Yankie's Birthday</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -862,6 +863,7 @@
     </div>
   </main>
 
+
   <!-- STAGE 2: CELEBRATION & WHITE CAKE CARD -->
   <section id="celebrationStage">
     <div class="white-cake-card">
@@ -1316,11 +1318,12 @@
 
       countdownInterval = setInterval(() => {
         secondsLeft--;
-        if (secondsLeft >= 0) {
+        if (secondsLeft > 0) {
           updateFlipCountdown(false);
           playPleasantClick();
-        }
-        if (secondsLeft <= 0) {
+        } else if (secondsLeft === 0) {
+          updateFlipCountdown(false);
+          // No tick sound on zero to transition cleanly to music
           clearInterval(countdownInterval);
           setTimeout(() => {
             transitionToCelebration();
@@ -1398,7 +1401,6 @@
       startContinuousBloomBursts();
 
       playBirthdayMusic();
-      playFanfareChime();
     }
 
     // Start on load
@@ -1439,9 +1441,6 @@
         burstFirecracker(cx - 70, cy - 20, 35);
         burstFirecracker(cx + 70, cy - 20, 35);
 
-        // Sound chime
-        playFanfareChime();
-
         // Update hint on the card
         cakeHint.innerHTML = '✨ The candles are blown! Make your wish in the pop-up! ✨';
         cakeHint.style.background = '#fef3c7';
@@ -1472,7 +1471,6 @@
 
       // More celebration fireworks!
       grandFireworksEruption();
-      playFanfareChime();
 
       // 3-second redirect countdown
       let redirectSeconds = 3;
