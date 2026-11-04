@@ -805,6 +805,11 @@
     .balloon-3 { right: 8%; bottom: -60px; animation-duration: 19s; animation-delay: 2s; font-size: 2.4rem; }
     .balloon-4 { right: 28%; bottom: -60px; animation-duration: 25s; animation-delay: 7s; font-size: 1.8rem; }
     .balloon-5 { left: 45%; bottom: -60px; animation-duration: 21s; animation-delay: 11s; font-size: 1.5rem; }
+    .balloon-6 { left: 12%; bottom: -60px; animation-duration: 20s; animation-delay: 1s; font-size: 1.8rem; }
+    .balloon-7 { left: 34%; bottom: -60px; animation-duration: 24s; animation-delay: 8s; font-size: 2rem; }
+    .balloon-8 { right: 18%; bottom: -60px; animation-duration: 17s; animation-delay: 5s; font-size: 1.7rem; }
+    .balloon-9 { right: 40%; bottom: -60px; animation-duration: 23s; animation-delay: 13s; font-size: 2.1rem; }
+    .balloon-10 { left: 66%; bottom: -60px; animation-duration: 19s; animation-delay: 16s; font-size: 1.6rem; }
 
     @keyframes floatBalloon {
       0% { transform: translateY(0) rotate(0deg); opacity: 0; }
@@ -931,12 +936,143 @@
       line-height: 1.65;
     }
 
-    .countdown-number {
-      display: block;
-      margin: 24px 0;
+    .countdown-units {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: clamp(8px, 2vw, 14px);
+      width: min(100%, 420px);
+      margin: 28px auto;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .countdown-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .countdown-tile {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1;
+      overflow: hidden;
+      border: 1px solid rgba(196, 109, 78, 0.24);
+      border-radius: 15px;
+      background:
+        linear-gradient(to bottom, transparent calc(50% - 0.5px), rgba(138, 93, 73, 0.14) 50%, transparent calc(50% + 0.5px)),
+        linear-gradient(180deg, #fff 0%, #fdfbf7 100%);
+      box-shadow: 0 12px 24px -8px rgba(138, 93, 73, 0.2), 0 4px 10px rgba(0, 0, 0, 0.05);
+      perspective: 350px;
+      transform-style: preserve-3d;
+      user-select: none;
+    }
+
+    .countdown-half {
+      position: absolute;
+      left: 0;
+      display: flex;
+      width: 100%;
+      height: 50%;
+      overflow: hidden;
+      justify-content: center;
       color: var(--primary);
-      font: 700 4.5rem/1 'Playfair Display', serif;
+      font: 700 clamp(1.65rem, 6vw, 2.4rem)/1 'Playfair Display', serif;
       font-variant-numeric: tabular-nums;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    .countdown-half.top {
+      top: 0;
+      align-items: flex-end;
+      transform-origin: bottom center;
+    }
+
+    .countdown-half.bottom {
+      bottom: 0;
+      align-items: flex-start;
+      transform-origin: top center;
+    }
+
+    .countdown-half span {
+      display: block;
+      line-height: 0;
+    }
+
+    .countdown-half.top span {
+      transform: translateY(50%);
+    }
+
+    .countdown-half.bottom span {
+      transform: translateY(-50%);
+    }
+
+    .countdown-half.top-flip {
+      z-index: 4;
+      align-items: flex-end;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+      background: linear-gradient(180deg, #fff 0%, #f7ebe1 100%);
+      transform-origin: bottom center;
+      animation: countdownFlipTop 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      will-change: transform;
+    }
+
+    .countdown-half.bottom-flip {
+      z-index: 5;
+      align-items: flex-start;
+      background: linear-gradient(180deg, #f5e4d7 0%, #fff 100%);
+      transform: rotateX(90deg);
+      transform-origin: top center;
+      animation: countdownFlipBottom 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.32s both;
+      will-change: transform;
+    }
+
+    @keyframes countdownFlipTop {
+      to { transform: rotateX(-90deg); }
+    }
+
+    @keyframes countdownFlipBottom {
+      from { transform: rotateX(90deg); }
+      to { transform: rotateX(0deg); }
+    }
+
+    .countdown-tile::before,
+    .countdown-tile::after {
+      position: absolute;
+      top: 50%;
+      width: 4px;
+      height: 8px;
+      border-radius: 2px;
+      background: var(--accent-gold);
+      content: '';
+      transform: translateY(-50%);
+    }
+
+    .countdown-tile::before {
+      left: -2px;
+    }
+
+    .countdown-tile::after {
+      right: -2px;
+    }
+
+    .countdown-label {
+      color: var(--text-muted);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
     }
 
     .countdown-skip {
@@ -947,6 +1083,28 @@
       color: var(--text-muted);
       font: 600 0.9rem 'Plus Jakarta Sans', sans-serif;
       cursor: pointer;
+    }
+
+    .countdown-sound {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      margin-top: 20px;
+      padding: 10px 14px;
+      border: 1px solid rgba(196, 109, 78, 0.2);
+      border-radius: 999px;
+      background: var(--primary-light);
+      color: var(--primary);
+      font: 600 0.85rem 'Plus Jakarta Sans', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .countdown-sound:hover,
+    .countdown-sound:focus-visible {
+      background: #f1dfd5;
+      color: var(--primary-hover);
     }
 
     .countdown-skip:hover,
@@ -963,7 +1121,13 @@
       .countdown-intro-card {
         padding: 36px 22px;
       }
+
+      .countdown-label {
+        font-size: 0.58rem;
+        letter-spacing: 0.04em;
+      }
     }
+
   </style>
 </head>
 <body>
@@ -975,34 +1139,190 @@
       </div>
       <h1 id="countdownIntroTitle">Hold on, <span class="gradient-text">Yankie</span>...</h1>
       <p>Something wonderful is about to begin. Counting down to your celebration!</p>
-      <span class="countdown-number" id="countdownIntroValue" aria-live="polite">15</span>
+      <div class="countdown-units" role="timer" aria-label="Time remaining">
+        <div class="countdown-unit">
+          <div class="countdown-tile" id="countdownIntroDays" aria-hidden="true">
+            <div class="countdown-half top"><span>00</span></div>
+            <div class="countdown-half bottom"><span>00</span></div>
+          </div>
+          <span class="countdown-label">Days</span>
+        </div>
+        <div class="countdown-unit">
+          <div class="countdown-tile" id="countdownIntroHours" aria-hidden="true">
+            <div class="countdown-half top"><span>00</span></div>
+            <div class="countdown-half bottom"><span>00</span></div>
+          </div>
+          <span class="countdown-label">Hours</span>
+        </div>
+        <div class="countdown-unit">
+          <div class="countdown-tile" id="countdownIntroMinutes" aria-hidden="true">
+            <div class="countdown-half top"><span>00</span></div>
+            <div class="countdown-half bottom"><span>00</span></div>
+          </div>
+          <span class="countdown-label">Minutes</span>
+        </div>
+        <div class="countdown-unit">
+          <div class="countdown-tile" id="countdownIntroSeconds" aria-hidden="true">
+            <div class="countdown-half top"><span>15</span></div>
+            <div class="countdown-half bottom"><span>15</span></div>
+          </div>
+          <span class="countdown-label">Seconds</span>
+        </div>
+      </div>
+      <span class="visually-hidden" id="countdownIntroAnnouncement" aria-live="polite">15 seconds remaining</span>
+      <button class="countdown-sound" id="countdownIntroSound" type="button" aria-pressed="false">
+        <span aria-hidden="true">🔇</span>
+        <span id="countdownIntroSoundLabel">Enable ticking sound</span>
+      </button>
       <button class="countdown-skip" id="countdownIntroSkip" type="button">Skip timer</button>
     </div>
   </section>
 
   <script>
     const countdownIntro = document.getElementById('countdownIntro');
-    const countdownIntroValue = document.getElementById('countdownIntroValue');
+    const countdownIntroUnits = {
+      days: document.getElementById('countdownIntroDays'),
+      hours: document.getElementById('countdownIntroHours'),
+      minutes: document.getElementById('countdownIntroMinutes'),
+      seconds: document.getElementById('countdownIntroSeconds')
+    };
+    const countdownIntroAnnouncement = document.getElementById('countdownIntroAnnouncement');
+    const countdownIntroSound = document.getElementById('countdownIntroSound');
+    const countdownIntroSoundLabel = document.getElementById('countdownIntroSoundLabel');
     let countdownIntroSeconds = 15;
+    let countdownAudioContext = null;
+    let countdownSoundEnabled = false;
+    let countdownIntroTimer = null;
+
+    function setCountdownIntroValue(tile, value) {
+      tile.querySelector('.top span').textContent = value;
+      tile.querySelector('.bottom span').textContent = value;
+    }
+
+    function flipCountdownIntroValue(tile, value) {
+      const topHalf = tile.querySelector('.top');
+      const bottomHalf = tile.querySelector('.bottom');
+      const currentValue = topHalf.textContent.trim();
+      if (currentValue === value) return;
+
+      const topFlip = document.createElement('div');
+      topFlip.className = 'countdown-half top top-flip';
+      topFlip.innerHTML = `<span>${currentValue}</span>`;
+
+      const bottomFlip = document.createElement('div');
+      bottomFlip.className = 'countdown-half bottom bottom-flip';
+      bottomFlip.innerHTML = `<span>${value}</span>`;
+
+      topHalf.querySelector('span').textContent = value;
+      topFlip.addEventListener('animationend', () => topFlip.remove(), { once: true });
+      bottomFlip.addEventListener('animationend', () => {
+        bottomHalf.querySelector('span').textContent = value;
+        bottomFlip.remove();
+      }, { once: true });
+
+      tile.append(topFlip, bottomFlip);
+    }
+
+    function updateCountdownIntro() {
+      const units = {
+        days: Math.floor(countdownIntroSeconds / 86400),
+        hours: Math.floor((countdownIntroSeconds % 86400) / 3600),
+        minutes: Math.floor((countdownIntroSeconds % 3600) / 60),
+        seconds: countdownIntroSeconds % 60
+      };
+
+      Object.entries(units).forEach(([unit, value]) => {
+        const tile = countdownIntroUnits[unit];
+        const formattedValue = String(value).padStart(2, '0');
+        if (tile.querySelector('.top').textContent.trim() !== formattedValue) {
+          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            setCountdownIntroValue(tile, formattedValue);
+          } else {
+            flipCountdownIntroValue(tile, formattedValue);
+          }
+        }
+      });
+      countdownIntroAnnouncement.textContent = `${countdownIntroSeconds} seconds remaining`;
+    }
+
+    function updateCountdownSoundControl(enabled, label) {
+      countdownSoundEnabled = enabled;
+      countdownIntroSound.setAttribute('aria-pressed', String(enabled));
+      countdownIntroSound.querySelector('[aria-hidden="true"]').textContent = enabled ? '🔊' : '🔇';
+      countdownIntroSoundLabel.textContent = label;
+    }
+
+    function playCountdownTick() {
+      if (!countdownSoundEnabled || !countdownAudioContext || countdownAudioContext.state !== 'running') return;
+
+      const start = countdownAudioContext.currentTime;
+      const oscillator = countdownAudioContext.createOscillator();
+      const gain = countdownAudioContext.createGain();
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(740, start);
+      oscillator.frequency.exponentialRampToValueAtTime(620, start + 0.08);
+      gain.gain.setValueAtTime(0.0001, start);
+      gain.gain.exponentialRampToValueAtTime(0.045, start + 0.008);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.12);
+      oscillator.connect(gain);
+      gain.connect(countdownAudioContext.destination);
+      oscillator.start(start);
+      oscillator.stop(start + 0.13);
+    }
+
+    countdownIntroSound.addEventListener('click', () => {
+      if (countdownSoundEnabled) {
+        updateCountdownSoundControl(false, 'Enable ticking sound');
+        return;
+      }
+
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextClass) {
+        countdownIntroSound.disabled = true;
+        updateCountdownSoundControl(false, 'Sound unavailable');
+        return;
+      }
+
+      try {
+        countdownAudioContext ??= new AudioContextClass();
+        const resumeAudio = countdownAudioContext.state === 'running'
+          ? Promise.resolve()
+          : countdownAudioContext.resume();
+        resumeAudio.then(() => {
+          updateCountdownSoundControl(true, 'Mute ticking sound');
+        }).catch(() => {
+          updateCountdownSoundControl(false, 'Sound unavailable');
+        });
+      } catch {
+        countdownIntroSound.disabled = true;
+        updateCountdownSoundControl(false, 'Sound unavailable');
+      }
+    });
 
     function enterBirthdayHome() {
       if (countdownIntro.hidden) return;
-      clearInterval(countdownIntroTimer);
+      if (countdownIntroTimer !== null) clearInterval(countdownIntroTimer);
       countdownIntro.hidden = true;
       window.dispatchEvent(new Event('birthday:enter'));
     }
 
-    const countdownIntroTimer = setInterval(() => {
-      countdownIntroSeconds -= 1;
-      countdownIntroValue.textContent = countdownIntroSeconds;
-      if (countdownIntroSeconds <= 0) enterBirthdayHome();
-    }, 1000);
-
     document.getElementById('countdownIntroSkip').addEventListener('click', enterBirthdayHome);
 
-    if (new URLSearchParams(window.location.search).get('skipCountdown') === '1') {
+    const skipCountdown = new URLSearchParams(window.location.search).get('skipCountdown') === '1';
+    const countdownSeenKey = 'yankieBirthdayCountdownSeen';
+    if (skipCountdown || localStorage.getItem(countdownSeenKey) === '1') {
       enterBirthdayHome();
-      window.history.replaceState(null, '', window.location.pathname + window.location.hash);
+      if (skipCountdown) {
+        window.history.replaceState(null, '', window.location.pathname + window.location.hash);
+      }
+    } else {
+      localStorage.setItem(countdownSeenKey, '1');
+      countdownIntroTimer = setInterval(() => {
+        countdownIntroSeconds -= 1;
+        updateCountdownIntro();
+        if (countdownIntroSeconds > 0) playCountdownTick();
+        if (countdownIntroSeconds <= 0) enterBirthdayHome();
+      }, 1000);
     }
   </script>
 
@@ -1052,6 +1372,11 @@
   <div class="balloon balloon-3">🎈</div>
   <div class="balloon balloon-4">🎉</div>
   <div class="balloon balloon-5">🎈</div>
+  <div class="balloon balloon-6">🎈</div>
+  <div class="balloon balloon-7">🎈</div>
+  <div class="balloon balloon-8">🎈</div>
+  <div class="balloon balloon-9">🎈</div>
+  <div class="balloon balloon-10">🎈</div>
 
   <!-- Main Hero Section (Left-aligned content) -->
   <main class="hero-section" id="hero">
@@ -1163,7 +1488,7 @@
       </div>
       <h2 class="timeline-title">Madness & Chaos</h2>
       <p class="timeline-subtitle">
-        A little walk down memory lane celebrating the wonderful moments, adventures, and milestones.
+        Cheers to the prettiest! Here's to many more days filled with wonderful birthdays.
       </p>
     </div>
 
