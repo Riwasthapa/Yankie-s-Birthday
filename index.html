@@ -1085,28 +1085,6 @@
       cursor: pointer;
     }
 
-    .countdown-sound {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-      margin-top: 20px;
-      padding: 10px 14px;
-      border: 1px solid rgba(196, 109, 78, 0.2);
-      border-radius: 999px;
-      background: var(--primary-light);
-      color: var(--primary);
-      font: 600 0.85rem 'Plus Jakarta Sans', sans-serif;
-      cursor: pointer;
-      transition: background 0.2s ease, color 0.2s ease;
-    }
-
-    .countdown-sound:hover,
-    .countdown-sound:focus-visible {
-      background: #f1dfd5;
-      color: var(--primary-hover);
-    }
-
     .countdown-skip:hover,
     .countdown-skip:focus-visible {
       color: var(--primary);
@@ -1170,10 +1148,6 @@
         </div>
       </div>
       <span class="visually-hidden" id="countdownIntroAnnouncement" aria-live="polite">15 seconds remaining</span>
-      <button class="countdown-sound" id="countdownIntroSound" type="button" aria-pressed="false">
-        <span aria-hidden="true">🔇</span>
-        <span id="countdownIntroSoundLabel">Enable ticking sound</span>
-      </button>
       <button class="countdown-skip" id="countdownIntroSkip" type="button">Skip timer</button>
     </div>
   </section>
@@ -1187,11 +1161,8 @@
       seconds: document.getElementById('countdownIntroSeconds')
     };
     const countdownIntroAnnouncement = document.getElementById('countdownIntroAnnouncement');
-    const countdownIntroSound = document.getElementById('countdownIntroSound');
-    const countdownIntroSoundLabel = document.getElementById('countdownIntroSoundLabel');
     let countdownIntroSeconds = 15;
     let countdownAudioContext = null;
-    let countdownSoundEnabled = false;
     let countdownIntroTimer = null;
 
     function setCountdownIntroValue(tile, value) {
@@ -1245,15 +1216,8 @@
       countdownIntroAnnouncement.textContent = `${countdownIntroSeconds} seconds remaining`;
     }
 
-    function updateCountdownSoundControl(enabled, label) {
-      countdownSoundEnabled = enabled;
-      countdownIntroSound.setAttribute('aria-pressed', String(enabled));
-      countdownIntroSound.querySelector('[aria-hidden="true"]').textContent = enabled ? '🔊' : '🔇';
-      countdownIntroSoundLabel.textContent = label;
-    }
-
     function playCountdownTick() {
-      if (!countdownSoundEnabled || !countdownAudioContext || countdownAudioContext.state !== 'running') return;
+      if (!countdownAudioContext || countdownAudioContext.state !== 'running') return;
 
       const start = countdownAudioContext.currentTime;
       const oscillator = countdownAudioContext.createOscillator();
@@ -1262,7 +1226,7 @@
       oscillator.frequency.setValueAtTime(740, start);
       oscillator.frequency.exponentialRampToValueAtTime(620, start + 0.08);
       gain.gain.setValueAtTime(0.0001, start);
-      gain.gain.exponentialRampToValueAtTime(0.045, start + 0.008);
+      gain.gain.exponentialRampToValueAtTime(0.0675, start + 0.008);
       gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.12);
       oscillator.connect(gain);
       gain.connect(countdownAudioContext.destination);
@@ -1270,38 +1234,37 @@
       oscillator.stop(start + 0.13);
     }
 
-    countdownIntroSound.addEventListener('click', () => {
-      if (countdownSoundEnabled) {
-        updateCountdownSoundControl(false, 'Enable ticking sound');
-        return;
-      }
-
+    function startCountdownAudio() {
+      if (!countdownAudioContext) return Promise.resolve();
       const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-      if (!AudioContextClass) {
-        countdownIntroSound.disabled = true;
-        updateCountdownSoundControl(false, 'Sound unavailable');
-        return;
-      }
+      if (!AudioContextClass) return Promise.resolve();
 
-      try {
-        countdownAudioContext ??= new AudioContextClass();
-        const resumeAudio = countdownAudioContext.state === 'running'
-          ? Promise.resolve()
-          : countdownAudioContext.resume();
-        resumeAudio.then(() => {
-          updateCountdownSoundControl(true, 'Mute ticking sound');
-        }).catch(() => {
-          updateCountdownSoundControl(false, 'Sound unavailable');
-        });
-      } catch {
-        countdownIntroSound.disabled = true;
-        updateCountdownSoundControl(false, 'Sound unavailable');
-      }
-    });
+      return countdownAudioContext.resume().then(() => {
+        if (countdownAudioContext.state === 'running') {
+          window.removeEventListener('pointerdown', unlockCountdownAudio);
+          window.removeEventListener('keydown', unlockCountdownAudio);
+          window.removeEventListener('touchstart', unlockCountdownAudio);
+        }
+      });
+    }
+
+    function unlockCountdownAudio() {
+      startCountdownAudio().catch((error) => {
+        console.warn('Could not start countdown audio after user interaction.', error);
+      });
+    }
 
     function enterBirthdayHome() {
       if (countdownIntro.hidden) return;
       if (countdownIntroTimer !== null) clearInterval(countdownIntroTimer);
+      window.removeEventListener('pointerdown', unlockCountdownAudio);
+      window.removeEventListener('keydown', unlockCountdownAudio);
+      window.removeEventListener('touchstart', unlockCountdownAudio);
+      if (countdownAudioContext && countdownAudioContext.state !== 'closed') {
+        countdownAudioContext.close().catch((error) => {
+          console.warn('Could not close countdown audio.', error);
+        });
+      }
       countdownIntro.hidden = true;
       window.dispatchEvent(new Event('birthday:enter'));
     }
@@ -1317,10 +1280,24 @@
       }
     } else {
       localStorage.setItem(countdownSeenKey, '1');
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (AudioContextClass) {
+        countdownAudioContext = new AudioContextClass();
+        window.addEventListener('pointerdown', unlockCountdownAudio);
+        window.addEventListener('keydown', unlockCountdownAudio);
+        window.addEventListener('touchstart', unlockCountdownAudio);
+        startCountdownAudio().catch((error) => {
+          if (countdownAudioContext.state !== 'suspended') {
+            console.warn('Could not start countdown audio.', error);
+          }
+        });
+      } else {
+        console.warn('Countdown audio is not supported by this browser.');
+      }
       countdownIntroTimer = setInterval(() => {
         countdownIntroSeconds -= 1;
         updateCountdownIntro();
-        if (countdownIntroSeconds > 0) playCountdownTick();
+        playCountdownTick();
         if (countdownIntroSeconds <= 0) enterBirthdayHome();
       }, 1000);
     }
@@ -1402,6 +1379,9 @@
           <button id="heroCelebrateBtn" class="btn btn-primary btn-lg" type="button">
             Celebrate 🎉
           </button>
+          <a href="https://drive.google.com/drive/folders/16fY9eJXjClaytNjk2yTdCCrsYNMR3e6n" class="btn btn-secondary btn-lg" target="_blank" rel="noopener noreferrer">
+            Some captured memories
+          </a>
           <a href="next.html" class="btn btn-secondary btn-lg">
             Ready for More Birthday Magic? &rarr;
           </a>
@@ -1617,6 +1597,9 @@
 
     <!-- Timeline End Call to Action -->
     <div class="timeline-end-cta">
+      <a href="https://drive.google.com/drive/folders/16fY9eJXjClaytNjk2yTdCCrsYNMR3e6n" class="btn btn-secondary btn-lg" target="_blank" rel="noopener noreferrer">
+        Birthday Memories
+      </a>
       <a href="next.html" class="btn btn-primary btn-lg">
         Ready for More Birthday Magic? &rarr;
       </a>
