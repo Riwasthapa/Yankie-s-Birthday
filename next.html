@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Next Chapter — Yankie's Birthday</title>
+  <title>Ready for More Birthday Magic? — Yankie's Birthday</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -14,13 +14,10 @@
       --card-bg: rgba(255, 255, 255, 0.75);
       --card-border: rgba(255, 255, 255, 0.85);
       --primary: #c46d4e;
-      --primary-hover: #b05c3e;
       --primary-light: #f7ede8;
       --text-main: #231f20;
       --text-muted: #6e6460;
-      --accent-gold: #d4a373;
       --shadow-soft: 0 20px 40px -12px rgba(138, 93, 73, 0.12), 0 4px 16px -2px rgba(0, 0, 0, 0.04);
-      --shadow-hover: 0 28px 56px -12px rgba(138, 93, 73, 0.18), 0 8px 24px -2px rgba(0, 0, 0, 0.06);
     }
 
     * {
@@ -36,38 +33,6 @@
       color: var(--text-main);
       overflow-x: hidden;
       position: relative;
-    }
-
-    .orb {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(90px);
-      opacity: 0.55;
-      pointer-events: none;
-      z-index: 0;
-      animation: floatSlow 14s ease-in-out infinite alternate;
-    }
-
-    .orb-1 {
-      width: 450px;
-      height: 450px;
-      background: radial-gradient(circle, #fde2d2 0%, rgba(253, 226, 210, 0) 70%);
-      top: -100px;
-      right: -100px;
-    }
-
-    .orb-2 {
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, #edd3be 0%, rgba(237, 211, 190, 0) 70%);
-      bottom: -150px;
-      left: -100px;
-      animation-delay: -7s;
-    }
-
-    @keyframes floatSlow {
-      0% { transform: translateY(0px) scale(1); }
-      100% { transform: translateY(-40px) scale(1.08); }
     }
 
     /* Navigation Bar */
@@ -164,119 +129,181 @@
       box-shadow: 0 12px 24px -4px rgba(196, 109, 78, 0.45);
     }
 
-    /* Content Area */
-    .page-section {
+    .balloon {
+      position: fixed;
+      font-size: 1.8rem;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.45;
+      animation: floatBalloon 16s linear infinite;
+    }
+
+    .balloon-1 { left: 5%; bottom: -60px; animation-duration: 18s; animation-delay: 0s; font-size: 2.2rem; }
+    .balloon-2 { left: 22%; bottom: -60px; animation-duration: 22s; animation-delay: 4s; font-size: 1.6rem; }
+    .balloon-3 { right: 8%; bottom: -60px; animation-duration: 19s; animation-delay: 2s; font-size: 2.4rem; }
+    .balloon-4 { right: 28%; bottom: -60px; animation-duration: 25s; animation-delay: 7s; font-size: 1.8rem; }
+    .balloon-5 { left: 45%; bottom: -60px; animation-duration: 21s; animation-delay: 11s; font-size: 1.5rem; }
+
+    @keyframes floatBalloon {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.55; }
+      90% { opacity: 0.55; }
+      100% { transform: translateY(-110vh) rotate(15deg); opacity: 0; }
+    }
+
+    .questionnaire-section {
       position: relative;
       z-index: 1;
-      max-width: 1200px;
+      max-width: 860px;
       margin: 0 auto;
-      padding: 60px 32px 100px 32px;
-      min-height: calc(100vh - 80px);
-      display: flex;
-      align-items: center;
+      padding: 48px 32px 64px;
     }
 
-    .content-grid {
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 60px;
-      align-items: center;
-      width: 100%;
-    }
-
-    .left-side {
-      text-align: left;
-      animation: fadeInLeft 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--primary-light);
+    .birthday-greeting {
+      margin-bottom: 12px;
       color: var(--primary);
-      padding: 6px 16px;
-      border-radius: 999px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      margin-bottom: 24px;
-      box-shadow: inset 0 0 0 1px rgba(196, 109, 78, 0.15);
-    }
-
-    h1 {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(2.4rem, 4.5vw, 3.5rem);
-      font-weight: 700;
+      font-size: clamp(2rem, 5vw, 3rem);
       line-height: 1.2;
-      color: var(--text-main);
-      margin-bottom: 24px;
+      text-align: center;
     }
 
-    h1 span {
-      background: linear-gradient(135deg, #c46d4e 0%, #d4a373 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .birthday-intro {
+      max-width: 700px;
+      margin: 0 auto 24px;
+      text-align: center;
     }
 
-    .message {
-      font-size: clamp(1.05rem, 1.8vw, 1.25rem);
-      line-height: 1.8;
+    .birthday-wish {
+      margin-bottom: 4px;
       color: var(--text-muted);
-      font-weight: 300;
-      max-width: 520px;
-      margin-bottom: 36px;
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      line-height: 1.8;
     }
 
-    /* Right Side Card */
-    .right-card {
-      background: var(--card-bg);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border: 1px solid var(--card-border);
-      border-radius: 28px;
-      padding: 44px 36px;
-      box-shadow: var(--shadow-soft);
-      animation: fadeInRight 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      position: relative;
+    .question-invite {
+      margin: 0;
+      color: var(--text-muted);
+      line-height: 1.6;
     }
 
-    .right-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #c46d4e, #e29578, #e5b299);
+    .questionnaire-fields {
+      display: grid;
+      gap: 18px;
     }
 
-    .right-card-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
-      margin-bottom: 16px;
+    .question-field {
+      min-width: 0;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.58);
+      border: 1px solid rgba(138, 93, 73, 0.12);
+      border-radius: 18px;
+    }
+
+    .question-field > label,
+    .question-field legend {
+      display: block;
+      margin-bottom: 12px;
       color: var(--text-main);
+      font-size: 0.98rem;
+      font-weight: 600;
+      line-height: 1.6;
     }
 
-    .wishes-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
+    .question-field fieldset {
+      min-width: 0;
+      border: 0;
     }
 
-    .wishes-list li {
+    .required-mark {
+      color: var(--primary);
+    }
+
+    .question-field input[type="text"],
+    .question-field textarea {
+      display: block;
+      width: 100%;
+      padding: 13px 15px;
+      border: 1px solid rgba(110, 100, 96, 0.24);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.88);
+      color: var(--text-main);
+      font: inherit;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .question-field textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .question-field input:focus-visible,
+    .question-field textarea:focus-visible,
+    .questionnaire-submit:focus-visible {
+      outline: 3px solid rgba(196, 109, 78, 0.28);
+      outline-offset: 2px;
+      border-color: var(--primary);
+    }
+
+    .radio-options {
+      display: grid;
+      gap: 10px;
+    }
+
+    .radio-option {
       display: flex;
       align-items: flex-start;
       gap: 10px;
-      font-size: 0.95rem;
+      padding: 10px 12px;
+      border: 1px solid rgba(110, 100, 96, 0.16);
+      border-radius: 12px;
       color: var(--text-muted);
+      line-height: 1.5;
+      cursor: pointer;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .radio-option:hover {
+      border-color: rgba(196, 109, 78, 0.48);
+      background: rgba(247, 237, 232, 0.6);
+    }
+
+    .radio-option input {
+      flex: 0 0 auto;
+      margin-top: 4px;
+      accent-color: var(--primary);
+    }
+
+    .questionnaire-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-top: 24px;
+      text-align: center;
+    }
+
+    .questionnaire-submit:disabled {
+      cursor: wait;
+      opacity: 0.72;
+      transform: none;
+    }
+
+    .submission-status {
+      min-height: 1.5em;
+      color: var(--text-muted);
+      font-size: 0.92rem;
       line-height: 1.5;
     }
 
-    .wishes-list li span {
-      color: var(--primary);
+    .google-form-frame {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      clip-path: inset(50%);
     }
 
     @keyframes fadeInLeft {
@@ -290,23 +317,27 @@
     }
 
     @media (max-width: 960px) {
-      .content-grid {
-        grid-template-columns: 1fr;
-        gap: 40px;
-      }
-      .page-section {
-        padding: 40px 24px 60px 24px;
-      }
       .nav-links {
         display: none;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .questionnaire-section {
+        padding: 0 18px;
+      }
+
+      .question-field {
+        padding: 16px;
+      }
+
+      .questionnaire-actions {
+        align-items: center;
       }
     }
   </style>
 </head>
 <body>
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-
   <header class="navbar">
     <div class="nav-container">
       <a href="index.html" class="nav-brand">Yankie<span>.</span></a>
@@ -314,40 +345,132 @@
         <a href="index.html" class="nav-link">Home</a>
         <a href="index.html#wish" class="nav-link">The Wish</a>
         <a href="index.html#timeline" class="nav-link">Memories</a>
-        <a href="next.html" class="nav-link active">Next Chapter</a>
+        <a href="next.html" class="nav-link active">Ready for More Birthday Magic?</a>
       </nav>
     </div>
   </header>
 
-  <main class="page-section">
-    <div class="content-grid">
-      <div class="left-side">
-        <div class="badge">
-          <span>✨ The Celebration Continues</span>
-        </div>
+  <div class="balloon balloon-1" aria-hidden="true">🎈</div>
+  <div class="balloon balloon-2" aria-hidden="true">✨</div>
+  <div class="balloon balloon-3" aria-hidden="true">🎈</div>
+  <div class="balloon balloon-4" aria-hidden="true">🎉</div>
+  <div class="balloon balloon-5" aria-hidden="true">🎈</div>
 
-        <h1>Wishing You an <span>Incredible Year</span> Ahead</h1>
-
-        <p class="message">
-          May every step forward bring you closer to your dreams, surrounded by the people who cherish you. Here's to making unforgettable memories and celebrating you today and always!
-        </p>
-
-        <div>
-          <a href="index.html" class="btn btn-primary">
-            &larr; Return to Birthday Home
-          </a>
-        </div>
-      </div>
-
-      <div class="right-card">
-        <h3 class="right-card-title">Three Wishes for Your Year</h3>
-        <ul class="wishes-list">
-          <li><span>✦</span> Endless inspiration and success in every goal you set.</li>
-          <li><span>✦</span> Peace of mind, genuine laughter, and vibrant health.</li>
-          <li><span>✦</span> Beautiful adventures and moments worth remembering forever.</li>
-        </ul>
-      </div>
+  <main class="questionnaire-section" aria-label="Birthday questions">
+    <h1 class="birthday-greeting">Happy Birthday, Yankie!</h1>
+    <div class="birthday-intro">
+      <p class="birthday-wish">May your year be full of love, laughter, and little adventures! 💛</p>
+      <p class="question-invite">Here are a few questions—could you please fill them out? 😊</p>
     </div>
+    <form
+      id="birthday-questionnaire"
+      action="https://docs.google.com/forms/d/e/1FAIpQLSeOrZrO4-J1xLn0VfdJ9GmvW0x3eQGVUIGvAgUjGhdlQ-zs6Q/formResponse"
+      method="POST"
+      target="google-form-response"
+      aria-label="Birthday questions"
+    >
+      <div class="questionnaire-fields">
+          <div class="question-field">
+            <label for="question-1">Why are you such a Bitch? <span class="required-mark" aria-hidden="true">*</span></label>
+            <input id="question-1" name="entry.1765151030" type="text" required>
+          </div>
+
+          <fieldset class="question-field">
+            <legend>Do you ever look in the mirror and say "Ughhhh!! Why am I so ugly?" <span class="required-mark" aria-hidden="true">*</span></legend>
+            <div class="radio-options">
+              <label class="radio-option"><input type="radio" name="entry.1442811390" value="yes, everytime!" required> <span>yes, everytime!</span></label>
+              <label class="radio-option"><input type="radio" name="entry.1442811390" value="yeah, sometimes!"> <span>yeah, sometimes!</span></label>
+              <label class="radio-option"><input type="radio" name="entry.1442811390" value="on bad day?"> <span>on bad day?</span></label>
+              <label class="radio-option"><input type="radio" name="entry.1442811390" value="Upeshna is so pretty."> <span>Upeshna is so pretty.</span></label>
+            </div>
+          </fieldset>
+
+          <div class="question-field">
+            <label for="question-3">Is there a difference between you getting angry and sad? Do you cry? when was the last time you cried? <span class="required-mark" aria-hidden="true">*</span></label>
+            <textarea id="question-3" name="entry.1507950861" required></textarea>
+          </div>
+
+          <div class="question-field">
+            <label for="question-4">Do you miss Darjeeling? Why do you walk all the time? <span class="required-mark" aria-hidden="true">*</span></label>
+            <textarea id="question-4" name="entry.672031952" required></textarea>
+          </div>
+
+          <div class="question-field">
+            <label for="question-5">Why don't you throw away your specs? you probably look pretty without it.</label>
+            <textarea id="question-5" name="entry.1452863131"></textarea>
+          </div>
+
+          <fieldset class="question-field">
+            <legend>Riwas is such a Great guy! I mean just say "Riwas da ki jai" <span class="required-mark" aria-hidden="true">*</span></legend>
+            <div class="radio-options">
+              <label class="radio-option"><input type="radio" name="entry.319362573" value="Riwas Dada ki jai" required> <span>Riwas Dada ki jai</span></label>
+              <label class="radio-option"><input type="radio" name="entry.319362573" value="Dada k saro ramre"> <span>Dada k saro ramre</span></label>
+              <label class="radio-option"><input type="radio" name="entry.319362573" value="God, he's such an angel"> <span>God, he's such an angel</span></label>
+              <label class="radio-option"><input type="radio" name="entry.319362573" value="Yankie's a bitch"> <span>Yankie's a bitch</span></label>
+            </div>
+          </fieldset>
+
+          <div class="question-field">
+            <label for="question-7">If you had just a month to live, what and how would you have wanted to live? <span class="required-mark" aria-hidden="true">*</span></label>
+            <textarea id="question-7" name="entry.12149651" required></textarea>
+          </div>
+
+          <div class="question-field">
+            <label for="question-8">What's that one thing that you think will give you a break? <span class="required-mark" aria-hidden="true">*</span></label>
+            <textarea id="question-8" name="entry.112693217" required></textarea>
+          </div>
+
+          <div class="question-field">
+            <label for="question-9">Say if someone could really make you wishes come true, what would you wish for? <span class="required-mark" aria-hidden="true">*</span></label>
+            <textarea id="question-9" name="entry.820368664" required></textarea>
+          </div>
+
+          <div class="question-field">
+            <label for="question-10">Happiest birthday once again! did you enjoy answering?Rate your birthday website, and when are you giving us a birthday party(creating this website was headache yk!!) <span class="required-mark" aria-hidden="true">*</span></label>
+            <textarea id="question-10" name="entry.606897722" required></textarea>
+          </div>
+      </div>
+
+      <div class="questionnaire-actions">
+        <button class="btn btn-primary questionnaire-submit" id="questionnaire-submit" type="submit">Submit</button>
+        <p class="submission-status" id="submission-status" role="status" aria-live="polite"></p>
+      </div>
+    </form>
   </main>
+
+  <iframe class="google-form-frame" name="google-form-response" title="Google Forms response"></iframe>
+
+  <script>
+    const questionnaire = document.getElementById('birthday-questionnaire');
+    const questionnaireSubmit = document.getElementById('questionnaire-submit');
+    const submissionStatus = document.getElementById('submission-status');
+    const googleFormFrame = document.querySelector('.google-form-frame');
+    let submissionPending = false;
+    let submissionTimer;
+
+    questionnaire.addEventListener('submit', (event) => {
+      if (submissionPending) {
+        event.preventDefault();
+        return;
+      }
+
+      submissionPending = true;
+      questionnaireSubmit.disabled = true;
+      submissionStatus.textContent = 'Sending your answers. Taking you back home shortly...';
+
+      submissionTimer = window.setTimeout(() => {
+        if (submissionPending) {
+          window.location.assign('index.html?skipCountdown=1');
+        }
+      }, 15000);
+    });
+
+    googleFormFrame.addEventListener('load', () => {
+      if (!submissionPending) return;
+
+      window.clearTimeout(submissionTimer);
+      window.location.assign('index.html?skipCountdown=1');
+    });
+  </script>
 </body>
 </html>

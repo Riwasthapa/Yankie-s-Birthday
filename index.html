@@ -999,6 +999,11 @@
     }, 1000);
 
     document.getElementById('countdownIntroSkip').addEventListener('click', enterBirthdayHome);
+
+    if (new URLSearchParams(window.location.search).get('skipCountdown') === '1') {
+      enterBirthdayHome();
+      window.history.replaceState(null, '', window.location.pathname + window.location.hash);
+    }
   </script>
 
   <!-- Ambient background glow orbs -->
@@ -1031,7 +1036,7 @@
         <a href="#hero" class="nav-link active">Home</a>
         <a href="#wish" class="nav-link">The Wish</a>
         <a href="#timeline" class="nav-link">Memories</a>
-        <a href="next.html" class="nav-link">Next Chapter</a>
+        <a href="next.html" class="nav-link">Ready for More Birthday Magic?</a>
       </nav>
       <button id="musicToggleBtn" class="nav-music-btn" title="Toggle Birthday Melody" type="button">
         <span class="music-icon">🎵</span>
@@ -1073,7 +1078,7 @@
             Celebrate 🎉
           </button>
           <a href="next.html" class="btn btn-secondary btn-lg">
-            Next Chapter &rarr;
+            Ready for More Birthday Magic? &rarr;
           </a>
         </div>
 
@@ -1288,7 +1293,7 @@
     <!-- Timeline End Call to Action -->
     <div class="timeline-end-cta">
       <a href="next.html" class="btn btn-primary btn-lg">
-        Continue to Next Chapter &rarr;
+        Ready for More Birthday Magic? &rarr;
       </a>
     </div>
   </section>
