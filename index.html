@@ -1546,6 +1546,8 @@
     };
     const countdownIntroAnnouncement = document.getElementById('countdownIntroAnnouncement');
     const countdownTarget = new Date(new Date().getFullYear(), 10, 7, 0, 0, 0);
+    const birthdayCeremonySeenKey = 'yankieBirthdayCeremonySeen';
+    const birthdayCeremonyAlreadySeen = localStorage.getItem(birthdayCeremonySeenKey) === '1';
     let countdownIntroSeconds = Math.max(0, Math.ceil((countdownTarget.getTime() - Date.now()) / 1000));
     let countdownAudioContext = null;
     let countdownIntroTimer = null;
@@ -1660,6 +1662,7 @@
 
     function enterBirthdayHome() {
       if (cakeBlowIntro.classList.contains('leaving')) return;
+      localStorage.setItem(birthdayCeremonySeenKey, '1');
       const continueButton = document.getElementById('cakeBlowContinue');
       continueButton.disabled = true;
       cakeBlowIntro.classList.add('leaving');
@@ -1692,29 +1695,33 @@
     });
     document.getElementById('cakeBlowContinue').addEventListener('click', enterBirthdayHome);
 
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (AudioContextClass) {
-      countdownAudioContext = new AudioContextClass();
-      window.addEventListener('pointerdown', unlockCountdownAudio);
-      window.addEventListener('keydown', unlockCountdownAudio);
-      window.addEventListener('touchstart', unlockCountdownAudio);
-      startCountdownAudio().catch((error) => {
-        if (countdownAudioContext.state !== 'suspended') {
-          console.warn('Could not start countdown audio.', error);
-        }
-      });
+    if (birthdayCeremonyAlreadySeen) {
+      countdownIntro.hidden = true;
     } else {
-      console.warn('Countdown audio is not supported by this browser.');
-    }
-    updateCountdownIntro();
-    if (countdownIntroSeconds <= 0) {
-      showBirthdayRevealPrompt();
-    } else {
-      countdownIntroTimer = setInterval(() => {
-        updateCountdownIntro();
-        if (countdownIntroSeconds > 0) playCountdownTick();
-        if (countdownIntroSeconds <= 0) showBirthdayRevealPrompt();
-      }, 1000);
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (AudioContextClass) {
+        countdownAudioContext = new AudioContextClass();
+        window.addEventListener('pointerdown', unlockCountdownAudio);
+        window.addEventListener('keydown', unlockCountdownAudio);
+        window.addEventListener('touchstart', unlockCountdownAudio);
+        startCountdownAudio().catch((error) => {
+          if (countdownAudioContext.state !== 'suspended') {
+            console.warn('Could not start countdown audio.', error);
+          }
+        });
+      } else {
+        console.warn('Countdown audio is not supported by this browser.');
+      }
+      updateCountdownIntro();
+      if (countdownIntroSeconds <= 0) {
+        showBirthdayRevealPrompt();
+      } else {
+        countdownIntroTimer = setInterval(() => {
+          updateCountdownIntro();
+          if (countdownIntroSeconds > 0) playCountdownTick();
+          if (countdownIntroSeconds <= 0) showBirthdayRevealPrompt();
+        }, 1000);
+      }
     }
   </script>
 
@@ -2334,7 +2341,11 @@
       });
     }
 
-    window.addEventListener('birthday:enter', playIndexSong, { once: true });
+    if (birthdayCeremonyAlreadySeen) {
+      playIndexSong();
+    } else {
+      window.addEventListener('birthday:enter', playIndexSong, { once: true });
+    }
 
     // Hanging bright red stars sparkle interaction
     document.querySelectorAll('.bright-red-star').forEach((star) => {
