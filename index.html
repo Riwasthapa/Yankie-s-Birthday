@@ -854,6 +854,48 @@
       animation: pulseSubtle 1.8s infinite;
     }
 
+    .music-control-wrap {
+      position: relative;
+      z-index: 110;
+      flex-shrink: 0;
+    }
+
+    .music-off-tip {
+      position: absolute;
+      top: calc(100% + 14px);
+      right: 0;
+      width: max-content;
+      max-width: min(220px, calc(100vw - 32px));
+      padding: 11px 15px;
+      border: 1px solid rgba(196, 109, 78, 0.35);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 8px 22px rgba(35, 31, 32, 0.16);
+      color: var(--text-main);
+      font-size: 0.85rem;
+      font-weight: 600;
+      line-height: 1.4;
+      text-align: center;
+      animation: introReveal 0.3s ease both;
+    }
+
+    .music-off-tip::before {
+      position: absolute;
+      top: -9px;
+      right: 24px;
+      width: 0;
+      height: 0;
+      border-right: 9px solid transparent;
+      border-bottom: 9px solid #fff;
+      border-left: 9px solid transparent;
+      content: '';
+      filter: drop-shadow(0 -1px 0 rgba(196, 109, 78, 0.35));
+    }
+
+    .music-off-tip[hidden] {
+      display: none;
+    }
+
     @keyframes pulseSubtle {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.04); }
@@ -1413,8 +1455,8 @@
         <span>A Special Countdown</span>
       </div>
       <h1 id="countdownIntroTitle">Hold on, <span class="gradient-text">Yankie</span>...</h1>
-      <p>Something wonderful is about to begin. Counting down to November 6 at midnight, local time!</p>
-      <div class="countdown-units" role="timer" aria-label="Time remaining until November 6 at midnight">
+      <p>Something wonderful is about to begin.<br>Counting down to your celebration!</p>
+      <div class="countdown-units" role="timer" aria-label="Time remaining">
         <div class="countdown-unit">
           <div class="countdown-tile" id="countdownIntroDays" aria-hidden="true">
             <div class="countdown-half top"><span>00</span></div>
@@ -1444,7 +1486,7 @@
           <span class="countdown-label">Seconds</span>
         </div>
       </div>
-      <span class="visually-hidden" id="countdownIntroAnnouncement" aria-live="polite">Counting down to November 6 at midnight.</span>
+      <span class="visually-hidden" id="countdownIntroAnnouncement" aria-live="polite">Time remaining until your celebration.</span>
       <button class="countdown-skip" id="countdownIntroSkip" type="button">Skip timer</button>
     </div>
   </section>
@@ -1503,7 +1545,7 @@
       seconds: document.getElementById('countdownIntroSeconds')
     };
     const countdownIntroAnnouncement = document.getElementById('countdownIntroAnnouncement');
-    const countdownTarget = new Date(new Date().getFullYear(), 10, 6, 0, 0, 0);
+    const countdownTarget = new Date(new Date().getFullYear(), 10, 7, 0, 0, 0);
     let countdownIntroSeconds = Math.max(0, Math.ceil((countdownTarget.getTime() - Date.now()) / 1000));
     let countdownAudioContext = null;
     let countdownIntroTimer = null;
@@ -1709,10 +1751,13 @@
         <a href="#timeline" class="nav-link">Memories</a>
         <a href="next.html" class="nav-link">Ready for More Birthday Magic?</a>
       </nav>
-      <button id="musicToggleBtn" class="nav-music-btn" title="Toggle Birthday Melody" type="button">
-        <span class="music-icon">🎵</span>
-        <span class="music-text">Birthday Tune</span>
-      </button>
+      <div class="music-control-wrap">
+        <button id="musicToggleBtn" class="nav-music-btn" title="Toggle Birthday Melody" type="button">
+          <span class="music-icon">🎵</span>
+          <span class="music-text">Birthday Tune</span>
+        </button>
+        <div class="music-off-tip" id="musicOffTip" role="status" hidden>You can turn it off</div>
+      </div>
     </div>
 
   </header>
@@ -2192,7 +2237,29 @@
 
     // Birthday Celebration Audio from music folder
     const indexMusic = document.getElementById('indexBirthdayMusic');
+    const musicOffTip = document.getElementById('musicOffTip');
     let isMusicPlaying = false;
+    let musicOffTipTimeout = null;
+
+    function clearMusicOffTipTimer() {
+      if (musicOffTipTimeout !== null) {
+        window.clearTimeout(musicOffTipTimeout);
+        musicOffTipTimeout = null;
+      }
+      musicOffTip.hidden = true;
+    }
+
+    function scheduleMusicOffTip() {
+      clearMusicOffTipTimer();
+      musicOffTipTimeout = window.setTimeout(() => {
+        if (indexMusic && !indexMusic.paused) musicOffTip.hidden = false;
+        musicOffTipTimeout = null;
+      }, 90000);
+    }
+
+    indexMusic.addEventListener('playing', scheduleMusicOffTip);
+    indexMusic.addEventListener('pause', clearMusicOffTipTimer);
+    indexMusic.addEventListener('ended', clearMusicOffTipTimer);
 
     function updateNavbarMusicBtn(playing, label = playing ? 'Playing...' : 'Birthday Tune') {
       const musicBtn = document.getElementById('musicToggleBtn');
@@ -2253,6 +2320,7 @@
     if (musicToggleBtn) {
       musicToggleBtn.addEventListener('click', () => {
         if (indexMusic && !indexMusic.paused) {
+          clearMusicOffTipTimer();
           indexMusic.pause();
           isMusicPlaying = false;
           updateNavbarMusicBtn(false);

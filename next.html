@@ -95,6 +95,53 @@
       color: #fff;
     }
 
+    .music-control-wrap {
+      position: relative;
+      z-index: 110;
+      flex-shrink: 0;
+    }
+
+    .music-off-tip {
+      position: absolute;
+      top: calc(100% + 14px);
+      right: 0;
+      width: max-content;
+      max-width: min(220px, calc(100vw - 32px));
+      padding: 11px 15px;
+      border: 1px solid rgba(196, 109, 78, 0.35);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 8px 22px rgba(35, 31, 32, 0.16);
+      color: var(--text-main);
+      font-size: 0.85rem;
+      font-weight: 600;
+      line-height: 1.4;
+      text-align: center;
+      animation: musicTipReveal 0.3s ease both;
+    }
+
+    .music-off-tip::before {
+      position: absolute;
+      top: -9px;
+      right: 24px;
+      width: 0;
+      height: 0;
+      border-right: 9px solid transparent;
+      border-bottom: 9px solid #fff;
+      border-left: 9px solid transparent;
+      content: '';
+      filter: drop-shadow(0 -1px 0 rgba(196, 109, 78, 0.35));
+    }
+
+    .music-off-tip[hidden] {
+      display: none;
+    }
+
+    @keyframes musicTipReveal {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     .nav-links {
       display: flex;
       align-items: center;
@@ -485,10 +532,13 @@
         <a href="index.html#timeline" class="nav-link">Memories</a>
         <a href="next.html" class="nav-link active">Ready for More Birthday Magic?</a>
       </nav>
-      <button id="musicToggleBtn" class="nav-music-btn" type="button" aria-label="Play birthday tune" aria-pressed="false">
-        <span aria-hidden="true">🎵</span>
-        <span id="musicToggleLabel">Birthday Tune</span>
-      </button>
+      <div class="music-control-wrap">
+        <button id="musicToggleBtn" class="nav-music-btn" type="button" aria-label="Play birthday tune" aria-pressed="false">
+          <span aria-hidden="true">🎵</span>
+          <span id="musicToggleLabel">Birthday Tune</span>
+        </button>
+        <div class="music-off-tip" id="musicOffTip" role="status" hidden>You can turn it off</div>
+      </div>
     </div>
   </header>
 
@@ -604,8 +654,26 @@
     const birthdayTune = document.getElementById('birthdayTune');
     const musicToggleBtn = document.getElementById('musicToggleBtn');
     const musicToggleLabel = document.getElementById('musicToggleLabel');
+    const musicOffTip = document.getElementById('musicOffTip');
     let submissionPending = false;
     let submissionComplete = false;
+    let musicOffTipTimeout = null;
+
+    function clearMusicOffTipTimer() {
+      if (musicOffTipTimeout !== null) {
+        window.clearTimeout(musicOffTipTimeout);
+        musicOffTipTimeout = null;
+      }
+      musicOffTip.hidden = true;
+    }
+
+    function scheduleMusicOffTip() {
+      clearMusicOffTipTimer();
+      musicOffTipTimeout = window.setTimeout(() => {
+        if (!birthdayTune.paused) musicOffTip.hidden = false;
+        musicOffTipTimeout = null;
+      }, 90000);
+    }
     let submissionTimer;
 
     function returnHome() {
@@ -668,6 +736,7 @@
 
     musicToggleBtn.addEventListener('click', () => {
       if (!birthdayTune.paused) {
+        clearMusicOffTipTimer();
         birthdayTune.pause();
         updateMusicButton(false);
         return;
@@ -676,8 +745,15 @@
       playBirthdayTune();
     });
 
-    birthdayTune.addEventListener('playing', () => updateMusicButton(true));
-    birthdayTune.addEventListener('pause', () => updateMusicButton(false));
+    birthdayTune.addEventListener('playing', () => {
+      updateMusicButton(true);
+      scheduleMusicOffTip();
+    });
+    birthdayTune.addEventListener('pause', () => {
+      updateMusicButton(false);
+      clearMusicOffTipTimer();
+    });
+    birthdayTune.addEventListener('ended', clearMusicOffTipTimer);
     birthdayTune.addEventListener('error', () => updateMusicButton(false, 'Tune unavailable'));
     playBirthdayTune();
 
