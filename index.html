@@ -914,6 +914,287 @@
       display: none;
     }
 
+    .cake-blow-intro {
+      position: fixed;
+      inset: 0;
+      z-index: 2001;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: rgba(253, 251, 247, 0.94);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      transition: opacity 0.55s ease;
+    }
+
+    .cake-blow-intro.leaving {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .cake-blow-intro[hidden] {
+      display: none;
+    }
+
+    .birthday-reveal-prompt {
+      position: fixed;
+      inset: 0;
+      z-index: 2001;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: rgba(35, 31, 32, 0.24);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .birthday-reveal-prompt[hidden] {
+      display: none;
+    }
+
+    .birthday-reveal-card {
+      width: min(100%, 360px);
+      padding: 28px 24px;
+      border: 1px solid rgba(196, 109, 78, 0.2);
+      border-radius: 20px;
+      background: #fff;
+      box-shadow: 0 24px 60px rgba(35, 31, 32, 0.2);
+      text-align: center;
+      animation: introReveal 0.45s ease both;
+    }
+
+    .birthday-reveal-card p {
+      color: var(--text-main);
+      font: 600 1.05rem/1.5 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .birthday-reveal-yes {
+      min-width: 100px;
+      margin-top: 20px;
+      padding: 10px 24px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--primary);
+      color: #fff;
+      font: 700 0.95rem 'Plus Jakarta Sans', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .birthday-reveal-yes:hover {
+      transform: translateY(-2px);
+      background: var(--primary-hover);
+    }
+
+    .birthday-reveal-yes:focus-visible {
+      outline: 3px solid rgba(196, 109, 78, 0.4);
+      outline-offset: 4px;
+    }
+
+    .birthday-poppers-active #confetti-canvas {
+      z-index: 2002;
+    }
+
+    .cake-blow-card {
+      width: min(100%, 560px);
+      padding: 48px 28px 56px;
+      text-align: center;
+      background: #fff;
+      border: 1px solid rgba(196, 109, 78, 0.18);
+      border-radius: 24px;
+      box-shadow: 0 24px 60px rgba(138, 93, 73, 0.18);
+      animation: introReveal 0.7s ease both;
+    }
+
+    .cake-blow-card h1 {
+      margin: 0 0 10px;
+      font: 700 clamp(1.8rem, 7vw, 2.5rem)/1.2 'Playfair Display', serif;
+      color: var(--text-main);
+    }
+
+    .cake-blow-card p {
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    .cake-blow-display {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 24px auto 12px;
+      padding: 10px 20px;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      transition: transform 0.25s ease;
+    }
+
+    .cake-blow-display:hover {
+      transform: scale(1.04);
+    }
+
+    .cake-blow-display:focus-visible,
+    .cake-blow-continue:focus-visible {
+      outline: 3px solid rgba(196, 109, 78, 0.4);
+      outline-offset: 4px;
+    }
+
+    .cake-blow-candles {
+      display: flex;
+      gap: 22px;
+      position: relative;
+      z-index: 1;
+      margin-bottom: -4px;
+    }
+
+    .cake-blow-candle {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .cake-blow-flame {
+      width: 13px;
+      height: 22px;
+      background: radial-gradient(ellipse at bottom, #fff7ad 0%, #ff8c42 60%, rgba(255, 87, 34, 0) 100%);
+      border-radius: 50% 50% 35% 35%;
+      box-shadow: 0 0 16px #ff8c42, 0 0 30px #ffc107;
+      animation: cakeFlameWiggle 0.8s ease-in-out infinite alternate;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .cake-blow-flame.blown {
+      opacity: 0;
+      transform: scale(0.2) translateY(-8px);
+      box-shadow: none;
+      animation: none;
+    }
+
+    .cake-blow-smoke {
+      position: absolute;
+      top: -12px;
+      width: 6px;
+      height: 18px;
+      background: rgba(160, 160, 160, 0.4);
+      border-radius: 50%;
+      filter: blur(3px);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .cake-blow-smoke.rising {
+      animation: cakeSmokeDrift 1.8s ease-out forwards;
+    }
+
+    @keyframes cakeSmokeDrift {
+      0% { opacity: 0.85; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-38px) scale(2.6) translateX(6px); }
+    }
+
+    @keyframes cakeFlameWiggle {
+      0% { transform: scale(1) rotate(-2deg); }
+      50% { transform: scale(1.08) rotate(3deg); }
+      100% { transform: scale(0.96) rotate(-1deg); }
+    }
+
+    .cake-blow-wick {
+      width: 2px;
+      height: 7px;
+      background: #333;
+    }
+
+    .cake-blow-stick {
+      width: 9px;
+      height: 32px;
+      border-radius: 3px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      background: repeating-linear-gradient(45deg, #f28482, #f28482 5px, #fff 5px, #fff 10px);
+    }
+
+    .cake-blow-candle:nth-child(2) .cake-blow-stick {
+      background: repeating-linear-gradient(45deg, #d4a373, #d4a373 5px, #fff 5px, #fff 10px);
+    }
+
+    .cake-blow-frosting-top {
+      width: 140px;
+      height: 12px;
+      background: #fff5eb;
+      border-radius: 12px 12px 4px 4px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    }
+
+    .cake-blow-tier-top,
+    .cake-blow-tier-bottom {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(180deg, #fcefe8, #f8ded3);
+    }
+
+    .cake-blow-tier-top {
+      width: 130px;
+      height: 42px;
+      gap: 10px;
+      border-radius: 4px;
+    }
+
+    .cake-blow-frosting-mid {
+      width: 185px;
+      height: 14px;
+      background: #fff5eb;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    }
+
+    .cake-blow-tier-bottom {
+      width: 175px;
+      height: 54px;
+      gap: 14px;
+      border-radius: 4px 4px 8px 8px;
+      background: linear-gradient(180deg, #fcefe8, #f5d4c5);
+    }
+
+    .cake-blow-stand {
+      width: 225px;
+      height: 10px;
+      margin-top: 2px;
+      border-radius: 10px;
+      background: #d4a373;
+      box-shadow: 0 4px 14px rgba(138, 93, 73, 0.2);
+    }
+
+    .cake-blow-hint {
+      display: inline-flex;
+      margin-top: 8px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .cake-blow-continue {
+      display: block;
+      margin: 34px auto 0;
+      padding: 12px 22px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--primary);
+      color: #fff;
+      font: 600 0.95rem 'Plus Jakarta Sans', sans-serif;
+      cursor: pointer;
+    }
+
+    .cake-blow-continue:hover {
+      background: var(--primary-hover);
+    }
+
+    .cake-blow-continue[hidden] {
+      display: none;
+    }
+
     .countdown-intro-card {
       width: min(100%, 560px);
       padding: 44px 32px;
@@ -1104,6 +1385,18 @@
         font-size: 0.58rem;
         letter-spacing: 0.04em;
       }
+
+      .cake-blow-card {
+        padding: 40px 18px 48px;
+      }
+
+      .cake-blow-display {
+        transform: scale(0.9);
+      }
+
+      .cake-blow-continue {
+        margin-top: 28px;
+      }
     }
 
   </style>
@@ -1116,8 +1409,8 @@
         <span>A Special Countdown</span>
       </div>
       <h1 id="countdownIntroTitle">Hold on, <span class="gradient-text">Yankie</span>...</h1>
-      <p>Something wonderful is about to begin. Counting down to your celebration!</p>
-      <div class="countdown-units" role="timer" aria-label="Time remaining">
+      <p>Something wonderful is about to begin. Counting down to November 6 at midnight, local time!</p>
+      <div class="countdown-units" role="timer" aria-label="Time remaining until November 6 at midnight">
         <div class="countdown-unit">
           <div class="countdown-tile" id="countdownIntroDays" aria-hidden="true">
             <div class="countdown-half top"><span>00</span></div>
@@ -1141,19 +1434,64 @@
         </div>
         <div class="countdown-unit">
           <div class="countdown-tile" id="countdownIntroSeconds" aria-hidden="true">
-            <div class="countdown-half top"><span>15</span></div>
-            <div class="countdown-half bottom"><span>15</span></div>
+            <div class="countdown-half top"><span>00</span></div>
+            <div class="countdown-half bottom"><span>00</span></div>
           </div>
           <span class="countdown-label">Seconds</span>
         </div>
       </div>
-      <span class="visually-hidden" id="countdownIntroAnnouncement" aria-live="polite">15 seconds remaining</span>
+      <span class="visually-hidden" id="countdownIntroAnnouncement" aria-live="polite">Counting down to November 6 at midnight.</span>
       <button class="countdown-skip" id="countdownIntroSkip" type="button">Skip timer</button>
+    </div>
+  </section>
+
+  <section class="birthday-reveal-prompt" id="birthdayRevealPrompt" role="dialog" aria-modal="true" aria-labelledby="birthdayRevealMessage" hidden>
+    <div class="birthday-reveal-card">
+      <p id="birthdayRevealMessage">Here's a little something for you</p>
+      <button class="birthday-reveal-yes" id="birthdayRevealYes" type="button">Yes</button>
+    </div>
+  </section>
+
+  <section class="cake-blow-intro" id="cakeBlowIntro" aria-labelledby="cakeBlowTitle" hidden>
+    <div class="cake-blow-card">
+      <h1 id="cakeBlowTitle">Make a Birthday Wish!</h1>
+      <p>Take a moment, then tap the cake to blow out the candles.</p>
+      <button class="cake-blow-display" id="cakeBlowDisplay" type="button" aria-label="Blow out the birthday candles">
+        <span class="cake-blow-candles" aria-hidden="true">
+          <span class="cake-blow-candle">
+            <span class="cake-blow-flame"></span>
+            <span class="cake-blow-smoke"></span>
+            <span class="cake-blow-wick"></span>
+            <span class="cake-blow-stick"></span>
+          </span>
+          <span class="cake-blow-candle">
+            <span class="cake-blow-flame"></span>
+            <span class="cake-blow-smoke"></span>
+            <span class="cake-blow-wick"></span>
+            <span class="cake-blow-stick"></span>
+          </span>
+          <span class="cake-blow-candle">
+            <span class="cake-blow-flame"></span>
+            <span class="cake-blow-smoke"></span>
+            <span class="cake-blow-wick"></span>
+            <span class="cake-blow-stick"></span>
+          </span>
+        </span>
+        <span class="cake-blow-frosting-top" aria-hidden="true"></span>
+        <span class="cake-blow-tier-top" aria-hidden="true">🍓　🌸　🍓</span>
+        <span class="cake-blow-frosting-mid" aria-hidden="true"></span>
+        <span class="cake-blow-tier-bottom" aria-hidden="true">✨　💖　✨</span>
+        <span class="cake-blow-stand" aria-hidden="true"></span>
+      </button>
+      <p class="cake-blow-hint" id="cakeBlowHint" aria-live="polite">🕯️ Tap the cake to blow the candles!</p>
+      <button class="cake-blow-continue" id="cakeBlowContinue" type="button" hidden>Continue →</button>
     </div>
   </section>
 
   <script>
     const countdownIntro = document.getElementById('countdownIntro');
+    const birthdayRevealPrompt = document.getElementById('birthdayRevealPrompt');
+    const cakeBlowIntro = document.getElementById('cakeBlowIntro');
     const countdownIntroUnits = {
       days: document.getElementById('countdownIntroDays'),
       hours: document.getElementById('countdownIntroHours'),
@@ -1161,10 +1499,10 @@
       seconds: document.getElementById('countdownIntroSeconds')
     };
     const countdownIntroAnnouncement = document.getElementById('countdownIntroAnnouncement');
-    let countdownIntroSeconds = 15;
+    const countdownTarget = new Date(new Date().getFullYear(), 10, 6, 0, 0, 0);
+    let countdownIntroSeconds = Math.max(0, Math.ceil((countdownTarget.getTime() - Date.now()) / 1000));
     let countdownAudioContext = null;
     let countdownIntroTimer = null;
-    let countdownWasShown = false;
 
     function setCountdownIntroValue(tile, value) {
       tile.querySelector('.top span').textContent = value;
@@ -1196,6 +1534,7 @@
     }
 
     function updateCountdownIntro() {
+      countdownIntroSeconds = Math.max(0, Math.ceil((countdownTarget.getTime() - Date.now()) / 1000));
       const units = {
         days: Math.floor(countdownIntroSeconds / 86400),
         hours: Math.floor((countdownIntroSeconds % 86400) / 3600),
@@ -1214,7 +1553,7 @@
           }
         }
       });
-      countdownIntroAnnouncement.textContent = `${countdownIntroSeconds} seconds remaining`;
+      countdownIntroAnnouncement.textContent = `Time remaining: ${units.days} days, ${units.hours} hours, ${units.minutes} minutes, and ${units.seconds} seconds.`;
     }
 
     function playCountdownTick() {
@@ -1255,9 +1594,12 @@
       });
     }
 
-    function enterBirthdayHome() {
+    function showBirthdayRevealPrompt() {
       if (countdownIntro.hidden) return;
-      if (countdownIntroTimer !== null) clearInterval(countdownIntroTimer);
+      if (countdownIntroTimer !== null) {
+        clearInterval(countdownIntroTimer);
+        countdownIntroTimer = null;
+      }
       window.removeEventListener('pointerdown', unlockCountdownAudio);
       window.removeEventListener('keydown', unlockCountdownAudio);
       window.removeEventListener('touchstart', unlockCountdownAudio);
@@ -1266,41 +1608,66 @@
           console.warn('Could not close countdown audio.', error);
         });
       }
-      countdownIntro.hidden = true;
-      window.dispatchEvent(new Event('birthday:enter'));
+      birthdayRevealPrompt.hidden = false;
+      document.getElementById('birthdayRevealYes').focus();
     }
 
-    document.getElementById('countdownIntroSkip').addEventListener('click', enterBirthdayHome);
+    function enterBirthdayHome() {
+      if (cakeBlowIntro.classList.contains('leaving')) return;
+      const continueButton = document.getElementById('cakeBlowContinue');
+      continueButton.disabled = true;
+      cakeBlowIntro.classList.add('leaving');
+      const transitionDuration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 550;
+      window.setTimeout(() => {
+        cakeBlowIntro.hidden = true;
+        cakeBlowIntro.classList.remove('leaving');
+        continueButton.disabled = false;
+      }, transitionDuration);
+    }
 
-    const skipCountdown = new URLSearchParams(window.location.search).get('skipCountdown') === '1';
-    const countdownSeenKey = 'yankieBirthdayCountdownSeen';
-    if (skipCountdown || localStorage.getItem(countdownSeenKey) === '1') {
-      enterBirthdayHome();
-      if (skipCountdown) {
-        window.history.replaceState(null, '', window.location.pathname + window.location.hash);
-      }
+    document.getElementById('countdownIntroSkip').addEventListener('click', showBirthdayRevealPrompt);
+    document.getElementById('birthdayRevealYes').addEventListener('click', () => {
+      birthdayRevealPrompt.hidden = true;
+      countdownIntro.hidden = true;
+      cakeBlowIntro.hidden = false;
+      window.dispatchEvent(new Event('birthday:enter'));
+      window.dispatchEvent(new Event('birthday:celebrate'));
+    });
+    document.getElementById('cakeBlowDisplay').addEventListener('click', (event) => {
+      const cake = event.currentTarget;
+      if (cake.disabled) return;
+      cake.disabled = true;
+      cake.querySelectorAll('.cake-blow-flame').forEach((flame) => flame.classList.add('blown'));
+      cake.querySelectorAll('.cake-blow-smoke').forEach((smoke) => smoke.classList.add('rising'));
+      window.dispatchEvent(new Event('birthday:candles-blown'));
+      document.getElementById('cakeBlowHint').textContent = '✨ The candles are blown! Make a wonderful birthday wish. ✨';
+      document.getElementById('cakeBlowContinue').hidden = false;
+      document.getElementById('cakeBlowContinue').focus();
+    });
+    document.getElementById('cakeBlowContinue').addEventListener('click', enterBirthdayHome);
+
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (AudioContextClass) {
+      countdownAudioContext = new AudioContextClass();
+      window.addEventListener('pointerdown', unlockCountdownAudio);
+      window.addEventListener('keydown', unlockCountdownAudio);
+      window.addEventListener('touchstart', unlockCountdownAudio);
+      startCountdownAudio().catch((error) => {
+        if (countdownAudioContext.state !== 'suspended') {
+          console.warn('Could not start countdown audio.', error);
+        }
+      });
     } else {
-      countdownWasShown = true;
-      localStorage.setItem(countdownSeenKey, '1');
-      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-      if (AudioContextClass) {
-        countdownAudioContext = new AudioContextClass();
-        window.addEventListener('pointerdown', unlockCountdownAudio);
-        window.addEventListener('keydown', unlockCountdownAudio);
-        window.addEventListener('touchstart', unlockCountdownAudio);
-        startCountdownAudio().catch((error) => {
-          if (countdownAudioContext.state !== 'suspended') {
-            console.warn('Could not start countdown audio.', error);
-          }
-        });
-      } else {
-        console.warn('Countdown audio is not supported by this browser.');
-      }
+      console.warn('Countdown audio is not supported by this browser.');
+    }
+    updateCountdownIntro();
+    if (countdownIntroSeconds <= 0) {
+      showBirthdayRevealPrompt();
+    } else {
       countdownIntroTimer = setInterval(() => {
-        countdownIntroSeconds -= 1;
         updateCountdownIntro();
         if (countdownIntroSeconds > 0) playCountdownTick();
-        if (countdownIntroSeconds <= 0) enterBirthdayHome();
+        if (countdownIntroSeconds <= 0) showBirthdayRevealPrompt();
       }, 1000);
     }
   </script>
@@ -1326,6 +1693,7 @@
 
   <!-- Birthday Celebration Background Music -->
   <audio id="indexBirthdayMusic" src="music/shidenbeatsmusic-happy-birthday-to-you-bossa-nova-style-arrangement-21399.mp3" preload="auto" loop></audio>
+  <audio id="candleClappingAudio" src="music/clapping.mp3" preload="auto"></audio>
 
   <!-- Sticky Portfolio Navigation Bar -->
   <header class="navbar">
@@ -1391,7 +1759,7 @@
 
         <div class="stats-grid">
           <div class="stat-item">
-            <span class="stat-value">Oct 31</span>
+            <span class="stat-value">Nov 7</span>
             <span class="stat-label">Special Day</span>
           </div>
           <div class="stat-divider"></div>
@@ -1487,7 +1855,7 @@
           />
         </div>
         <p class="memory-message">
-          "Where the sweetest stories began—every day since has been brighter with you in it."
+          "Stay calm and be patient, make silly faces and smile"
         </p>
       </div>
 
@@ -1502,7 +1870,7 @@
           />
         </div>
         <p class="memory-message">
-          "Quiet, gentle moments and the sweetest smile that could light up any room."
+          "Your gentle soul needs rests sometimes, so go easy on yourself"
         </p>
       </div>
 
@@ -1517,7 +1885,7 @@
           />
         </div>
         <p class="memory-message">
-          "Pure joy, uncontrollable laughter, and sunshine that couldn't match your glow."
+          "It's okay to have a huge forehead, and I forgive you for this."
         </p>
       </div>
 
@@ -1532,7 +1900,7 @@
           />
         </div>
         <p class="memory-message">
-          "Cherished golden afternoons, wind in your hair, and effortless happiness."
+          "Smile a lot, even if your cheeks hurt. "
         </p>
       </div>
 
@@ -1547,7 +1915,7 @@
           />
         </div>
         <p class="memory-message">
-          "Unforgettable days and candid moments that I will always hold close to my heart."
+          "Fliters, Filters, Filters....., You're pretty without one."
         </p>
       </div>
 
@@ -1562,7 +1930,7 @@
           />
         </div>
         <p class="memory-message">
-          "A sweet reminder that your presence always brings calm, warmth, and genuine delight."
+          "Oyee hoiiii, you sly fox."
         </p>
       </div>
 
@@ -1577,7 +1945,7 @@
           />
         </div>
         <p class="memory-message">
-          "Just days before the big day, still shining bright and looking stunning as always."
+          "yeah yeah! I know right. Riwas da ki jai!!"
         </p>
       </div>
 
@@ -1592,7 +1960,7 @@
           />
         </div>
         <p class="memory-message">
-          "To the most wonderful person today: may this year bring you boundless happiness, peace, and endless reasons to smile! 🎂✨"
+          "Be less dramatic,Drama Queen! we enjoy your company! 🎂✨"
         </p>
       </div>
     </div>
@@ -1671,6 +2039,14 @@
     }
     renderConfetti();
 
+    const candleClappingAudio = document.getElementById('candleClappingAudio');
+    window.addEventListener('birthday:candles-blown', () => {
+      candleClappingAudio.currentTime = 0;
+      candleClappingAudio.play().catch((error) => {
+        console.warn('Could not play the candle-blowing applause.', error);
+      });
+    });
+
     // Trigger fireworks
     function triggerCelebration(e) {
       const rect = e.currentTarget.getBoundingClientRect();
@@ -1680,6 +2056,27 @@
       createFirework(x - 60, y - 20, 30);
       createFirework(x + 60, y - 20, 30);
     }
+
+    let popperBurstInterval = null;
+
+    window.addEventListener('birthday:celebrate', () => {
+      document.body.classList.add('birthday-poppers-active');
+      const burstPoppers = () => {
+        createFirework(canvas.width * 0.5, canvas.height * 0.36, 70);
+        window.setTimeout(() => createFirework(canvas.width * 0.2, canvas.height * 0.42, 45), 180);
+        window.setTimeout(() => createFirework(canvas.width * 0.8, canvas.height * 0.42, 45), 360);
+      };
+      burstPoppers();
+      popperBurstInterval = window.setInterval(burstPoppers, 1000);
+    });
+
+    window.addEventListener('birthday:candles-blown', () => {
+      if (popperBurstInterval !== null) {
+        window.clearInterval(popperBurstInterval);
+        popperBurstInterval = null;
+      }
+      document.body.classList.remove('birthday-poppers-active');
+    });
 
     document.getElementById('heroCelebrateBtn').addEventListener('click', triggerCelebration);
 
@@ -1796,6 +2193,7 @@
     function updateNavbarMusicBtn(playing, label = playing ? 'Playing...' : 'Birthday Tune') {
       const musicBtn = document.getElementById('musicToggleBtn');
       if (musicBtn) {
+        musicBtn.title = playing ? 'Pause Birthday Melody' : 'Play Birthday Melody';
         if (playing) {
           musicBtn.classList.add('playing');
           musicBtn.innerHTML = `<span class="music-icon">🎶</span><span class="music-text">${label}</span>`;
@@ -1831,7 +2229,11 @@
       }).catch((error) => {
         isMusicPlaying = false;
         if (error.name === 'NotAllowedError') {
-          updateNavbarMusicBtn(false, 'Tap to play');
+          updateNavbarMusicBtn(false, 'Allow site sound');
+          const musicBtn = document.getElementById('musicToggleBtn');
+          if (musicBtn) {
+            musicBtn.title = 'Your browser blocked autoplay. Allow sound for this site in your browser settings.';
+          }
           musicRetryEvents.forEach((eventName) => {
             window.addEventListener(eventName, retryIndexSong, { passive: true });
           });
@@ -1860,11 +2262,7 @@
       });
     }
 
-    if (countdownWasShown) {
-      window.addEventListener('birthday:enter', playIndexSong, { once: true });
-    } else {
-      playIndexSong();
-    }
+    window.addEventListener('birthday:enter', playIndexSong, { once: true });
 
     // Hanging bright red stars sparkle interaction
     document.querySelectorAll('.bright-red-star').forEach((star) => {

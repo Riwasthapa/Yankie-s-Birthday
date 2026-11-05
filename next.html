@@ -266,7 +266,7 @@
 
     .question-field textarea {
       min-height: 120px;
-      resize: vertical;
+      resize: none;
     }
 
     .question-field input:focus-visible,
@@ -609,7 +609,7 @@
     let submissionTimer;
 
     function returnHome() {
-      window.location.assign('index.html?skipCountdown=1');
+      window.location.assign('index.html');
     }
 
     function showSubmissionComplete() {
@@ -629,6 +629,7 @@
       musicToggleBtn.classList.toggle('playing', playing);
       musicToggleBtn.setAttribute('aria-pressed', String(playing));
       musicToggleBtn.setAttribute('aria-label', playing ? 'Pause birthday tune' : 'Play birthday tune');
+      musicToggleBtn.title = playing ? 'Pause Birthday Melody' : 'Play Birthday Melody';
       musicToggleLabel.textContent = label;
     }
 
@@ -652,7 +653,8 @@
         return true;
       }).catch((error) => {
         if (error.name === 'NotAllowedError') {
-          updateMusicButton(false, 'Tap to play');
+          updateMusicButton(false, 'Allow site sound');
+          musicToggleBtn.title = 'Your browser blocked autoplay. Allow sound for this site in your browser settings.';
           musicRetryEvents.forEach((eventName) => {
             window.addEventListener(eventName, retryBirthdayTune, { passive: true });
           });
