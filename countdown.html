@@ -855,11 +855,6 @@
         </div>
       </div>
 
-      <div>
-        <button id="skipBtn" class="btn btn-ghost" type="button">
-          Skip timer ⏩
-        </button>
-      </div>
     </div>
   </main>
 
@@ -1331,12 +1326,6 @@
         }
       }, 1000);
     }
-
-    // Skip Button
-    document.getElementById('skipBtn').addEventListener('click', () => {
-      clearInterval(countdownInterval);
-      transitionToCelebration();
-    });
 
     // =========================================
     // STAGE 2: TRANSITION TO CELEBRATION

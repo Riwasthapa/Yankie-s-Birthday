@@ -1487,7 +1487,6 @@
         </div>
       </div>
       <span class="visually-hidden" id="countdownIntroAnnouncement" aria-live="polite">Time remaining until your celebration.</span>
-      <button class="countdown-skip" id="countdownIntroSkip" type="button">Skip timer</button>
     </div>
   </section>
 
@@ -1674,7 +1673,6 @@
       }, transitionDuration);
     }
 
-    document.getElementById('countdownIntroSkip').addEventListener('click', showBirthdayRevealPrompt);
     document.getElementById('birthdayRevealYes').addEventListener('click', () => {
       birthdayRevealPrompt.hidden = true;
       countdownIntro.hidden = true;
