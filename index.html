@@ -1164,6 +1164,7 @@
     let countdownIntroSeconds = 15;
     let countdownAudioContext = null;
     let countdownIntroTimer = null;
+    let countdownWasShown = false;
 
     function setCountdownIntroValue(tile, value) {
       tile.querySelector('.top span').textContent = value;
@@ -1279,6 +1280,7 @@
         window.history.replaceState(null, '', window.location.pathname + window.location.hash);
       }
     } else {
+      countdownWasShown = true;
       localStorage.setItem(countdownSeenKey, '1');
       const AudioContextClass = window.AudioContext || window.webkitAudioContext;
       if (AudioContextClass) {
@@ -1297,7 +1299,7 @@
       countdownIntroTimer = setInterval(() => {
         countdownIntroSeconds -= 1;
         updateCountdownIntro();
-        playCountdownTick();
+        if (countdownIntroSeconds > 0) playCountdownTick();
         if (countdownIntroSeconds <= 0) enterBirthdayHome();
       }, 1000);
     }
@@ -1791,45 +1793,54 @@
     const indexMusic = document.getElementById('indexBirthdayMusic');
     let isMusicPlaying = false;
 
-    function updateNavbarMusicBtn(playing) {
+    function updateNavbarMusicBtn(playing, label = playing ? 'Playing...' : 'Birthday Tune') {
       const musicBtn = document.getElementById('musicToggleBtn');
       if (musicBtn) {
         if (playing) {
           musicBtn.classList.add('playing');
-          musicBtn.innerHTML = '<span class="music-icon">🎶</span><span class="music-text">Playing...</span>';
+          musicBtn.innerHTML = `<span class="music-icon">🎶</span><span class="music-text">${label}</span>`;
         } else {
           musicBtn.classList.remove('playing');
-          musicBtn.innerHTML = '<span class="music-icon">🎵</span><span class="music-text">Birthday Tune</span>';
+          musicBtn.innerHTML = `<span class="music-icon">🎵</span><span class="music-text">${label}</span>`;
         }
       }
     }
 
+    const musicRetryEvents = ['pointerdown', 'keydown', 'touchstart'];
+    function removeMusicRetryListeners() {
+      musicRetryEvents.forEach((eventName) => {
+        window.removeEventListener(eventName, retryIndexSong);
+      });
+    }
+
+    function retryIndexSong(event) {
+      if (event.target === document.getElementById('musicToggleBtn')) return;
+      playIndexSong().then((playing) => {
+        if (playing) removeMusicRetryListeners();
+      });
+    }
+
     function playIndexSong() {
-      if (!indexMusic) {
-        return;
-      }
+      if (!indexMusic) return Promise.resolve(false);
       indexMusic.volume = 0.85;
-      const playPromise = indexMusic.play();
-      if (playPromise !== undefined) {
-        playPromise.then(() => {
-          isMusicPlaying = true;
-          updateNavbarMusicBtn(true);
-        }).catch(() => {
-          // If browser autoplay policy held back audio, play on very first presence or gesture
-          const startOnPresence = () => {
-            indexMusic.play().then(() => {
-              isMusicPlaying = true;
-              updateNavbarMusicBtn(true);
-            }).catch(() => {});
-            ['pointerdown', 'pointermove', 'mousedown', 'mousemove', 'touchstart', 'click', 'keydown', 'scroll'].forEach(evt => {
-              window.removeEventListener(evt, startOnPresence);
-            });
-          };
-          ['pointerdown', 'pointermove', 'mousedown', 'mousemove', 'touchstart', 'click', 'keydown', 'scroll'].forEach(evt => {
-            window.addEventListener(evt, startOnPresence, { once: true, passive: true });
+      return indexMusic.play().then(() => {
+        isMusicPlaying = true;
+        updateNavbarMusicBtn(true);
+        removeMusicRetryListeners();
+        return true;
+      }).catch((error) => {
+        isMusicPlaying = false;
+        if (error.name === 'NotAllowedError') {
+          updateNavbarMusicBtn(false, 'Tap to play');
+          musicRetryEvents.forEach((eventName) => {
+            window.addEventListener(eventName, retryIndexSong, { passive: true });
           });
-        });
-      }
+        } else {
+          updateNavbarMusicBtn(false);
+          console.warn('Could not play the birthday tune.', error);
+        }
+        return false;
+      });
     }
 
     const musicToggleBtn = document.getElementById('musicToggleBtn');
@@ -1849,7 +1860,11 @@
       });
     }
 
-    window.addEventListener('birthday:enter', playIndexSong, { once: true });
+    if (countdownWasShown) {
+      window.addEventListener('birthday:enter', playIndexSong, { once: true });
+    } else {
+      playIndexSong();
+    }
 
     // Hanging bright red stars sparkle interaction
     document.querySelectorAll('.bright-red-star').forEach((star) => {

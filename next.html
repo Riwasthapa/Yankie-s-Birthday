@@ -475,7 +475,7 @@
   </style>
 </head>
 <body>
-  <audio id="birthdayTune" src="music/shidenbeatsmusic-happy-birthday-to-you-bossa-nova-style-arrangement-21399.mp3" preload="none" loop></audio>
+  <audio id="birthdayTune" src="music/shidenbeatsmusic-happy-birthday-to-you-bossa-nova-style-arrangement-21399.mp3" preload="auto" autoplay loop></audio>
   <header class="navbar">
     <div class="nav-container">
       <a href="index.html" class="nav-brand">Happy Birthday <span>Yankie</span></a>
@@ -632,6 +632,38 @@
       musicToggleLabel.textContent = label;
     }
 
+    const musicRetryEvents = ['pointerdown', 'keydown', 'touchstart'];
+    function removeMusicRetryListeners() {
+      musicRetryEvents.forEach((eventName) => {
+        window.removeEventListener(eventName, retryBirthdayTune);
+      });
+    }
+
+    function retryBirthdayTune(event) {
+      if (event.target === musicToggleBtn) return;
+      playBirthdayTune();
+    }
+
+    function playBirthdayTune() {
+      birthdayTune.volume = 0.85;
+      return birthdayTune.play().then(() => {
+        updateMusicButton(true);
+        removeMusicRetryListeners();
+        return true;
+      }).catch((error) => {
+        if (error.name === 'NotAllowedError') {
+          updateMusicButton(false, 'Tap to play');
+          musicRetryEvents.forEach((eventName) => {
+            window.addEventListener(eventName, retryBirthdayTune, { passive: true });
+          });
+        } else {
+          updateMusicButton(false, 'Birthday Tune');
+          console.warn('Could not play the birthday tune.', error);
+        }
+        return false;
+      });
+    }
+
     musicToggleBtn.addEventListener('click', () => {
       if (!birthdayTune.paused) {
         birthdayTune.pause();
@@ -639,16 +671,13 @@
         return;
       }
 
-      birthdayTune.volume = 0.85;
-      birthdayTune.play().then(() => {
-        updateMusicButton(true);
-      }).catch(() => {
-        updateMusicButton(false, 'Tap to retry');
-      });
+      playBirthdayTune();
     });
 
+    birthdayTune.addEventListener('playing', () => updateMusicButton(true));
     birthdayTune.addEventListener('pause', () => updateMusicButton(false));
     birthdayTune.addEventListener('error', () => updateMusicButton(false, 'Tune unavailable'));
+    playBirthdayTune();
 
     questionnaire.addEventListener('submit', (event) => {
       if (submissionPending) {
